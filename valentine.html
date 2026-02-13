@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine 💘</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    .buttons {
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 22px;
+      font-size: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      left: 50px;
+      top: 40px;
+    }
+
+    #noBtn {
+      background: #444;
+      color: white;
+      left: 200px;
+      top: 40px;
+      transform-origin: center;
+    }
+
+    .heart {
+      font-size: 45px;
+      margin-bottom: 10px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <div class="heart">💖</div>
+    <h1>Will you be my Valentine?</h1>
+    <p>I promise I'll treat you like the most special person ever 🥺</p>
+
+    <div class="buttons">
+      <button id="yesBtn">YES 💘</button>
+      <button id="noBtn">NO 😭</button>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const card = document.getElementById("card");
+
+    let noScale = 1;
+
+    // Put NO button somewhere random inside the card area
+    function moveNoButton() {
+      const container = document.querySelector(".buttons");
+
+      const maxX = container.clientWidth - noBtn.offsetWidth;
+      const maxY = container.clientHeight - noBtn.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    // Shrink the NO button each time she gets close
+    function shrinkNoButton() {
+      noScale -= 0.12;
+      if (noScale < 0.2) noScale = 0.2;
+      noBtn.style.transform = `scale(${noScale})`;
+    }
+
+    // Detect mouse getting close to NO button
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+
+      const distX = e.clientX - btnCenterX;
+      const distY = e.clientY - btnCenterY;
+
+      const distance = Math.sqrt(distX * distX + distY * distY);
+
+      // If mouse gets close, run away
+      if (distance < 120) {
+        moveNoButton();
+        shrinkNoButton();
+      }
+    });
+
+    // If she somehow clicks NO, still run away
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButton();
+      shrinkNoButton();
+    });
+
+    // YES button works
+    yesBtn.addEventListener("click", () => {
+      card.innerHTML = `
+        <div class="heart">💞</div>
+        <h1>YAYYYYY!!!</h1>
+        <p>
+          You just made me the happiest person ever 😭💘<br><br>
+          I can’t wait to be your Valentine 🥺❤️
+        </p>
+      `;
+    });
+
+    // Start with a random position
+    moveNoButton();
+  </script>
+
+</body>
+</html>
